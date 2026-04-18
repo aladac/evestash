@@ -1,0 +1,23 @@
+{
+  "name": "cargo-scan",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "generate": "bash scripts/generate-types.sh",
+    "dev": "wrangler pages dev dist",
+    "build": "vite build",
+    "deploy": "vite build && wrangler pages deploy dist",
+    "preview": "vite build && vite preview"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.13.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "openapi-typescript": "^7.6.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "wrangler": "^3.100.0"
+  }
+}

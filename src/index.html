@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EVEStash — EVE Online Appraisal</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>EVEStash</h1>
+        <p>EVE Online appraisal</p>
+        <div id="share-info" class="share-info hidden"></div>
+        <div id="capacity-bar" class="capacity-bar hidden">
+          <div class="capacity-label">
+            <span id="capacity-text"></span>
+          </div>
+          <div class="capacity-track">
+            <div class="capacity-fill" id="capacity-fill"></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="input-section">
+        <div>
+          <label for="cargo-input">Paste multibuy / cargo scan</label>
+          <textarea
+            id="cargo-input"
+            placeholder="Tritanium 50000&#10;Pyerite 25000&#10;Mexallon x10000&#10;1000 Isogen&#10;Nocxium"
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="input-row">
+          <div>
+            <label for="hub-select">Trade Hub</label>
+            <select id="hub-select">
+              <option value="jita" selected>Jita</option>
+              <option value="amarr">Amarr</option>
+              <option value="dodixie">Dodixie</option>
+              <option value="rens">Rens</option>
+              <option value="hek">Hek</option>
+              <option value="universe">Universe Average</option>
+            </select>
+          </div>
+          <div class="scan-btn-wrap">
+            <label>&nbsp;</label>
+            <button id="scan-btn" type="button">Scan</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="loading" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <span>Querying ESI&hellip;</span>
+      </div>
+
+      <section id="results" class="results-section hidden">
+        <div class="results-header">
+          <h2>Appraisal</h2>
+          <div class="results-controls">
+            <button id="share-btn" class="toggle-btn" type="button" title="Copy shareable link">Share</button>
+            <button id="format-toggle" class="toggle-btn" type="button" title="Switch to compact numbers (M, B, T)">Compact</button>
+            <span class="hub-tag" id="hub-label">Jita 4-4</span>
+          </div>
+        </div>
+        <div class="results-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Sell Unit</th>
+                <th>Buy Unit</th>
+                <th>Sell Total</th>
+                <th>Buy Total</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+            <tfoot>
+              <tr>
+                <td class="label-cell" colspan="4">Grand Total</td>
+                <td class="cell-isk" id="totals-sell">0.00</td>
+                <td class="cell-isk" id="totals-buy">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section id="errors" class="errors-section hidden">
+        <h3>Unresolved Items</h3>
+        <div id="errors-list"></div>
+      </section>
+
+      <footer>
+        <p>
+          Prices from
+          <a href="https://esi.evetech.net" target="_blank" rel="noopener"
+            >EVE Swagger Interface</a
+          >
+          &middot; Data &copy; CCP Games
+        </p>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
