@@ -72,6 +72,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   await env.CACHE.put(`share:${id}`, payload, { expirationTtl: SHARE_TTL_SECONDS })
 
+  // Increment global counter
+  const globalStr = await env.CACHE.get("share:_count")
+  const globalUsed = globalStr ? parseInt(globalStr, 10) : 0
+  await env.CACHE.put("share:_count", String(globalUsed + 1))
+
   return jsonResponse({
     id,
     expires_at: expiresAt,

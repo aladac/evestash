@@ -427,19 +427,34 @@ footer a:hover {
   user-select: all;
 }
 
-/* Capacity bar */
+/* Status bars */
 
-.capacity-bar {
-  margin-top: 0.6rem;
+.status-bars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
-.capacity-label {
+.status-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.2rem;
+}
+
+.status-bar-label {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+}
+
+.status-bar-value {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-secondary);
 }
 
 .capacity-track {

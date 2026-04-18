@@ -28,8 +28,6 @@ let lastInputText = ""
 let currentShareId: string | null = null
 let currentShareUrl: string | null = null
 
-// Capacity config — easy to change
-const SHARE_CAPACITY = 10_000
 const SHARE_TTL_DAYS = 5
 
 function initModeFromUrl(): number {
@@ -153,7 +151,7 @@ shareBtn.addEventListener("click", async () => {
     await navigator.clipboard.writeText(currentShareUrl)
     flashShareBtn()
     showShareInfo(data.expires_at)
-    showCapacityBar(data.remaining)
+    fetchShareStatus()
   } catch {
     showToast("Failed to create share link")
   } finally {
@@ -271,21 +269,15 @@ function showShareInfo(expiresAt: string) {
 function hideShareInfo() {
   const el = document.getElementById("share-info")
   if (el) el.classList.add("hidden")
-  const bar = document.getElementById("capacity-bar")
-  if (bar) bar.classList.add("hidden")
 }
 
-function showCapacityBar(dailyRemaining: number) {
-  const bar = document.getElementById("capacity-bar")
-  const fill = document.getElementById("capacity-fill")
-  const text = document.getElementById("capacity-text")
-  if (!bar || !fill || !text) return
+function updateBar(fillId: string, textId: string, remaining: number, total: number, label: string) {
+  const fill = document.getElementById(fillId)
+  const text = document.getElementById(textId)
+  if (!fill || !text) return
 
-  const dailyLimit = 10 // matches backend DAILY_LIMIT
-  const used = dailyLimit - dailyRemaining
-  const pct = (dailyRemaining / dailyLimit) * 100
-
-  text.textContent = `${dailyRemaining}/${dailyLimit} shares remaining today`
+  const pct = (remaining / total) * 100
+  text.textContent = `${remaining.toLocaleString()} / ${total.toLocaleString()} ${label}`
 
   fill.style.width = `${pct}%`
   fill.classList.remove("level-green", "level-amber", "level-red")
@@ -296,9 +288,27 @@ function showCapacityBar(dailyRemaining: number) {
   } else {
     fill.classList.add("level-red")
   }
-
-  bar.classList.remove("hidden")
 }
+
+async function fetchShareStatus() {
+  try {
+    const resp = await fetch("/api/share-status")
+    if (!resp.ok) return
+    const data = (await resp.json()) as {
+      daily_remaining: number
+      daily_limit: number
+      global_remaining: number
+      global_limit: number
+    }
+    updateBar("daily-fill", "daily-text", data.daily_remaining, data.daily_limit, "remaining")
+    updateBar("global-fill", "global-text", data.global_remaining, data.global_limit, "available")
+  } catch {
+    // Silent fail
+  }
+}
+
+// Fetch status on page load
+fetchShareStatus()
 
 function escapeHtml(s: string): string {
   const div = document.createElement("div")
@@ -337,6 +347,8 @@ async function loadShared() {
     }
     currentShareId = id
     currentShareUrl = `${window.location.origin}/s/${id}`
+    // Hide share button on shared links — it's already shared
+    shareBtn.classList.add("hidden")
     updateUrl()
     await doAppraise(data.text, data.hub || "jita")
     if (data.expires_at) {

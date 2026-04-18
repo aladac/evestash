@@ -12,12 +12,24 @@
         <h1>EVEStash</h1>
         <p>EVE Online appraisal</p>
         <div id="share-info" class="share-info hidden"></div>
-        <div id="capacity-bar" class="capacity-bar hidden">
-          <div class="capacity-label">
-            <span id="capacity-text"></span>
+        <div class="status-bars">
+          <div class="status-bar">
+            <div class="status-bar-header">
+              <span class="status-bar-label">Daily shares</span>
+              <span class="status-bar-value" id="daily-text">—</span>
+            </div>
+            <div class="capacity-track">
+              <div class="capacity-fill" id="daily-fill"></div>
+            </div>
           </div>
-          <div class="capacity-track">
-            <div class="capacity-fill" id="capacity-fill"></div>
+          <div class="status-bar">
+            <div class="status-bar-header">
+              <span class="status-bar-label">Global capacity</span>
+              <span class="status-bar-value" id="global-text">—</span>
+            </div>
+            <div class="capacity-track">
+              <div class="capacity-fill" id="global-fill"></div>
+            </div>
           </div>
         </div>
       </header>
