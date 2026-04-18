@@ -52,6 +52,12 @@ function sanitizeLine(raw: string): string {
   // Skip summary/total lines
   if (/^total:/i.test(line)) return ""
 
+  // Skip EFT fitting header: [Ship, Fit Name]
+  if (/^\[.+,.+\]$/.test(line)) return ""
+
+  // Skip empty slot placeholders
+  if (/^\[empty/i.test(line)) return ""
+
   // EVE fitting/inventory export: tab-separated columns
   // Format: "Item Name\tQty\tPrice\tTotal" or with multi-spaces
   // Strip trailing columns that are just "-", "0", or empty
